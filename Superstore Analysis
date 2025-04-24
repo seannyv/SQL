@@ -1,0 +1,19 @@
+-- order the items by highest in price.
+SELECT item_name, price
+FROM superstore
+ORDER BY price desc;
+
+-- what is the total amount of items in stock?
+SELECT SUM(stock_quantity)
+FROM superstore;
+
+-- the price for the item in the category of "Kitchen Supplies".
+SELECT item_name, category, price
+FROM superstore
+GROUP BY item_name = 'Kitchen Supplies'
+ORDER BY price;
+
+-- what is the rating for the item "Cozy Throw Blanket?".
+SELECT average_rating, item_name
+FROM superstore
+WHERE item_name = 'Cozy Throw Blanket';
