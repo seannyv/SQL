@@ -1,0 +1,36 @@
+-- 1. what companies have had paid time off with 7 or more days however, no healthcare benefits? [filter using WHERE with AND, OR, IN, or NOT IN]
+SELECT company_name, paid_time_off_days, healthcare_benefits
+FROM fortune_companies
+WHERE paid_time_off_days >= 7
+AND healthcare_benefits = 0
+ORDER BY paid_time_off_days asc;
+
+-- 2. what are the average weeks for maternity leave with more than 8 weeks for the companies listed? [calculation and alias]
+SELECT company_name, AVG(maternity_leave_weeks) AS average_maternity_leave_weeks
+FROM fortune_companies
+GROUP BY company_name
+HAVING average_maternity_leave_weeks > 8
+ORDER BY average_maternity_leave_weeks asc;
+
+-- 3. turn the maternity leave weeks to months, order months on leave from highest to lowest leave. [CASE]
+SELECT company_name, maternity_leave_weeks
+, CASE WHEN maternity_leave_weeks > 16 THEN "4 months or more on leave"
+WHEN maternity_leave_weeks > 12 THEN "3 months on leave"
+WHEN maternity_leave_weeks > 8 THEN "2 months on leave"
+WHEN maternity_leave_weeks > 4 THEN "1 month on leave"
+END AS months_on_leave
+FROM fortune_companies
+ORDER BY months_on_leave desc;
+
+-- 4. what companies had over $350 in revenue that was in the industry of technology? label new column as tech revenue. [HAVING]
+SELECT company_name, SUM(revenue) AS tech_revenue
+FROM fortune_companies
+WHERE industry = 'Technology'
+GROUP BY company_name
+HAVING tech_revenue > 350;
+
+-- 5. what is the revenue rounded for companies with healthcare benefits with an alias as rounded revenue?
+SELECT company_name,
+ROUND(revenue, 1) AS rounded_revenue
+FROM fortune_companies
+WHERE healthcare_benefits = 1;
