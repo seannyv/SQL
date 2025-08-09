@@ -1,0 +1,53 @@
+-- using a LEFT JOIN, list all the VIPs last and first names and any panels they are presenting at.
+
+SELECT vips.last_name
+, vips.first_name
+, events.event_id
+FROM vips
+LEFT JOIN events
+ON vips.event = events.event_id;
+
+-- using an INNER JOIN, find the vips members first & last names that have a hotel reservation with an association type 'research'.
+
+SELECT vips.first_name,
+vips.last_name,
+reservations.hotel
+FROM vips
+INNER JOIN reservations
+ON vips.member_id = reservations.member_id
+WHERE assoc_type = 'research';
+
+-- using multiple JOINs find the members last names, with their hotel address who were members since the year '2003'.
+
+SELECT vips.last_name,
+hotels.address,
+reservations.hotel
+FROM vips
+INNER JOIN reservations
+ON vips.member_id = reservations.member_id
+
+INNER JOIN hotels
+ON reservations.hotel = hotels.hotel_id
+
+WHERE vips.member_since >2003;
+
+-- what is the first year members joined the vip's association who are associated with the government?
+
+SELECT MIN(member_since)
+FROM vips
+HAVING assoc_type = 'government';
+
+-- using a subquery, find the hotels that have hosted more than 10 vips. 
+
+SELECT hotel_name
+FROM hotels
+WHERE hotel_id IN (SELECT hotel FROM reservations GROUP BY hotel HAVING COUNT(DISTINCT member_id) > 10);
+
+-- using a SELF JOIN, what members are providing feedback to what members? 
+
+SELECT members.member_id member_id,
+members.first_name members,
+feedbackers.first_name feedbackers
+FROM vips members
+JOIN vips feedbackers
+ON members.provides_feedback_to = feedbackers.member_id;
